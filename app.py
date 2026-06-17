@@ -9,39 +9,44 @@ st.set_page_config(page_title="OpenLaunchKit", layout="wide", page_icon="🚀")
 st.title("🚀 OpenLaunchKit")
 st.markdown("The zero-cost, local-first toolkit for indie developers to launch without the overhead.")
 
-tab1, tab2, tab3 = st.tabs(["App Store Optimization (Local AI)", "Mockup Generator", "Git Release Notes"])
+# Configuration utilities
+st.sidebar.header("⚙️ Engine Control")
+gemini_key = st.sidebar.text_input("Gemini API Key (Optional Override)", type="password", placeholder="Paste cloud key here...")
+st.sidebar.markdown("[Get a lifetime free-tier key here ↗](https://aistudio.google.com/)")
+
+tab1, tab2, tab3 = st.tabs(["App Store Optimization", "Mockup Generator", "Git Release Notes"])
 
 with tab1:
     st.header("ASO & Keyword Extractor")
-    st.markdown("Use local LLMs to generate App Store/Play Store copy without API costs.")
+    st.markdown("Optimize listings instantly using native local text processing or intelligent AI hooks.")
     
-    app_name = st.text_input("App Name", value="AutoKit - Vehicle Manager")
-    app_desc = st.text_area("Raw Description or Competitor's Copy", height=150, placeholder="Paste raw features here...")
+    app_desc = st.text_area("App Core Mechanics / Competitor Descriptions", height=180, placeholder="Type layout structure here...")
     
-    if st.button("Generate ASO Copy"):
+    if st.button("Extract Production Metadata"):
         if app_desc:
-            with st.spinner("Warming up local model..."):
-                st.success("ASO Generation Triggered! (Requires Ollama running locally)")
-                st.code("Keywords: Vehicle Maintenance, Mileage Tracker, Service Log, OBD2, Car Manager")
+            with st.spinner("Analyzing text distributions..."):
+                keywords, engine_used = generate_keywords(app_desc, gemini_key=gemini_key)
+                st.info(f"Active Processing Unit: **{engine_used}**")
+                st.markdown(keywords)
         else:
-            st.warning("Please enter a description to optimize.")
+            st.warning("Please supply descriptive target reference text.")
 
 with tab2:
-    st.header("Zero-Cost Mockup Generator")
-    st.markdown("Upload a raw screenshot to frame it in a modern device and add marketing copy.")
+    st.header("Mockup Canvas Tool")
+    st.markdown("Instantly turn raw viewport snaps into polished promotional layouts.")
     
     col1, col2 = st.columns(2)
     with col1:
-        uploaded_file = st.file_uploader("Upload Raw Screenshot", type=["png", "jpg", "jpeg"])
-        banner_text = st.text_input("Banner Text", value="Track Your Services Easily")
-        bg_color = st.color_picker("Background Color", "#1E1E1E")
+        uploaded_file = st.file_uploader("Select Viewport File Source", type=["png", "jpg", "jpeg"])
+        banner_text = st.text_input("Marketing Action Text Headline", value="Design Better Software Faster")
+        bg_color = st.color_picker("Choose Background Palette Accent Color", "#4F46E5")
         
     with col2:
-        if uploaded_file and st.button("Generate & Download Mockup"):
+        if uploaded_file:
             output_file = os.path.join("output", "promo_mockup.png")
             generate_mockup(uploaded_file, banner_text, bg_color, output_file)
-            st.success("Mockup generated successfully!")
-            st.image(output_file, caption="Generated Mockup")
+            st.success("Asset configuration rendered successfully.")
+            st.image(output_file, caption="Export Preview Asset", use_container_width=True)
 
 with tab3:
     st.header("Automated Release Notes")

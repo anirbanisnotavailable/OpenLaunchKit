@@ -4,7 +4,6 @@
 
 # OpenLaunchKit 🚀
 ...
-# OpenLaunchKit 🚀
 
 A free, open-source, local-first toolkit designed to help indie developers handle App Store Optimization (ASO), promotional mockups, and release notes without spending money on expensive subscriptions.
 
